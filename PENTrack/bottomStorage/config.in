@@ -1,0 +1,284 @@
+############### config file for PENTrack ###############
+# put comments after #
+
+[GLOBAL]
+# simtype: 1 => particles, 3 => Bfield, 4 => cut through BField, 7 => print geometry, 8 => print mr-drp for solid angle
+# 9 => print integrated mr-drp for incident theta vs energy
+simtype 1 
+
+# number of primary particles to be simulated
+simcount 8000
+
+# max. simulation time [s]
+simtime 250
+
+# path of file containing materials, paths are assumed to be relative to this config file's path
+materials_file ../materials.in
+
+# secondaries: set to 1 to also simulate secondary particles (e.g. decay protons/electrons) [0/1]
+secondaries 0
+
+#cut through B-field (simtype == 4) *** (x1 y1 z1  x2 y2 z2  x3 y3 z3 num1 num2) 3 edges of cut plane, number of sample points in direction 1->2/1->3 ***
+BCutPlane	-3.7 -0.8 -0.8	-3.7 0.8 0.8	3.7 -0.8 -0.8	800	3700
+
+#parameters to be used for generating a 2d histogram for the mr diffuse reflection probability into a solid angle 
+#Param order: Fermi pot. [neV], Neut energy [neV], RMS roughness [nm], correlation length [nm], theta_i [0..pi/2]
+MRSolidAngleDRP 220 200 1E-9 25E-9 0.1
+
+#parameters to be used for generating a 2d histogram of the integrated diffuse reflection probabilitites of the incident angle vs energy of a neutron 
+#Parameter order: Fermi potential of the material, RMS roughness [nm], Correlation length [nm], starting angle [0..pi/2], ending angle [0..pi/2], 
+#starting neutron energy [neV], ending neutron energy [neV]
+MRThetaIEnergy 54 2.5E-9 20E-9 0 1.570796327 0 1000
+
+ROOTlog 1
+
+[GEOMETRY]
+############# Solids the program will load ################
+#  Each solid has to be assigned unique ID and a material from above.
+# IDs have to be larger than 0, ID 1 will be assumed to be the default medium which is always present.
+# Particles absorbed in a solid will be flagged with the ID of the solid.
+# The ID also defines the order in which overlapping solids are handled (highest ID will be considered first).
+# If paths to StL files are relative they have to be defined relative to this config file.
+# Ignore times are pairs of times [s] in between the solid will be ignored, e.g. 100-200 500-1000.
+#ID	STLfile    material_name    ignore_times
+
+[GEOMETRY]                 
+#ID    STLfile                                                              material   ignore_times
+1      ignored                                                              default    0-0
+
+
+#2       ../STL/OC100-100_EndCap-1.STL                                                              NiP      
+
+##VAT Valve
+#260	../STL/OC100-VATVALVE-1TNE0741-2.STL							   NiP
+#261	../STL/OC100-VATVALVE-1TNE0741-1.STL                                                       NiP
+#valve open
+#262	../STL/OC100-VATVALVE-1BladeOpen_mater_PolishedSteel-1.STL                                 NiP
+#valve closed
+#263	../STL/OC100-VATVALVE-1VatBladeClosedSplit-1BladeClosed_mater_PolishedSteel-1.STL          NiP
+#264	../STL/OC100-VATVALVE-1VatBladeClosedSplit-1teller1-1.STL                                  NiP
+#265	../STL/OC100-VATVALVE-1VatBladeClosedSplit-1teller2-1.STL                                  NiP
+#valve body
+#266	../STL/OC100-VATVALVE-1TDE2465red-1.STL                                                    NiP
+#267	../STL/OC100-VATVALVE-1ValveBody_mater_PolishedSteel-1.STL                                 NiP
+
+##Guides
+#270	../STL/OC100-TNE0617_219-1.STL				                                                     NiP
+#271	../STL/OC100-TNE0617_25-1.STL                                                              NiP
+#272	../STL/OC100-TNE0617_307-1.STL                                                             NiP
+#273	../STL/OC100-TNE0617_317-1.STL                                                             NiP
+#274	../STL/OC100-TNE0617_586-1.STL                                                             NiP  
+#275	../STL/OC100-TNE0617_750-1.STL                                                             NiP
+#276	../STL/OC100-TNE0736-1.STL                                                                 NiP
+#277	../STL/OC100-TNE0736-2.STL                                                                 NiP
+#278	../STL/OC100-TNE0736-3.STL                                                                 NiP
+#279	../STL/OC100-TNE0736-4.STL                                                                 NiP
+#280	../STL/OC100-TNE0736-5.STL                                                                 NiP
+#281	../STL/OC100-TNE0736-6.STL                                                                 NiP
+#282	../STL/OC100-TNE0736-7.STL                                                                 NiP
+#283	../STL/OC100-TNE0739-1.STL                                                                 NiP
+#284	../STL/OC100-TNE0739-2.STL                                                                 NiP
+#285	../STL/OC100-TNS0519-1.STL                                                                 NiP
+#286	../STL/OC100-TNS0519-2.STL                                                                 NiP
+
+##Rotary Valve
+# Source to cell
+#290     ../STL/OC100-ASA-2RotatryValve-RotaryValve-2.STL                                          NiMo       
+# Cell to detectors
+#291     ../STL/OC100-ASA-2RotatryValve-RotaryValve-3.STL                                          NiMo         
+
+##UCN Cell
+300	../STL/nEDMsensitivity-OC100-1OC100Cell-1AbsorberPlug-1.STL						                                         UCNdet
+301	../STL/nEDMsensitivity-OC100-1OC100Cell-1AbsorbingDisc-1.STL                                                    UCNdet
+302	../STL/nEDMsensitivity-OC100-1OC100Cell-1AbsorbingDisc-2.STL                                                    UCNdet
+303	../STL/nEDMsensitivity-OC100-1OC100Cell-1CellCounter-1.STL                                                      UCNcount
+#Valve body
+304	../STL/nEDMsensitivity-OC100-1OC100Cell-1TNE0257-OSAC-1.STL                                                  NiP
+#Closed
+305	../STL/nEDMsensitivity-OC100-1OC100Cell-1TNE0319-1.STL                                                       NiP
+#Cpen
+#306	../STL/OC100-1OC100Cell-1TNE0317-1.STL                                                       NiP
+#307	../STL/OC100-1OC100Cell-1TNE0325-1.STL                                                       NiP
+#Bottom plate
+308	../STL/nEDMsensitivity-OC100-1OC100Cell-1TNE0498-1.STL                                                       NiP
+#Insulator
+309	../STL/nEDMsensitivity-OC100-1OC100Cell-1TNE0564-1.STL                                                          dPE
+##Electrode	
+310	../STL/nEDMsensitivity-OC100-1OC100Cell-1TNE0565-1.STL                                                          DLC    
+
+
+##ASA and Detectors
+#Window
+#320     ../STL/OC100-DetectorWindow-1.STL                                                          GS30
+#Detector
+#321     ../STL/OC100-DetectorWindow-2.STL                                                          GS20  
+#322	../STL/OC100-Foil-1.STL                                                                        Al
+#323	../STL/OC100-ASA-2ASA_Analyzer_Foil.stp-1ASA_foil_holder_v1_1.stp-1vacuum_1_1_1.stp-1.STL   NiP
+#324	../STL/OC100-ASA-2ASA_Analyzer_Foil.stp-1ASA_foil_holder_v1_1.stp-1vacuum_2_1_1.stp-1.STL   NiP
+#325	../STL/OC100-ASA-2ASA-D2AFGuide-1.STL                                                       NiP
+#326	../STL/OC100-ASA-2ASA-SFGuideQuartz-1.STL                                                      DLC
+#327	../STL/OC100-ASA-2Detector6LiHousingNew-1.STL                                               NiP
+#328	../STL/OC100-ASA-2TNE0617_180-1.STL                                                         NiP
+#329	../STL/OC100-ASA-2TNE0617_180-2.STL                                                         NiP
+#330	../STL/OC100-ASA-2TNE0736-1.STL                                                             NiP
+#331	../STL/OC100-ASA-2TNE0736-2.STL                                                             NiP
+#332	../STL/OC100-ASA-2TNS0519-2.STL                                                             NiP
+
+
+
+
+
+[SOURCE]
+############ sourcemodes ###############
+# STLvolume: source volume is given by a STL file, particles are created in the space completely enclosed in the STL surface
+# boxvolume: particle starting values are diced in the given parameter range (x,y,z) [m,m,m]
+# cylvolume: particle starting values are diced in the given parameter range (r,phi,z) [m,degree,m]
+# For volume sources the initial particle density can be weighted by the available phase space (Set PhaseSpaceWeighting to 1).
+#  In that case, the particle's energy spectrum s interpreted as a total-energy spectrum.
+#
+# STLsurface: starting values are on surfaces in the given STL-volume
+# cylsurface: starting values are on surfaces in the cylindrical volume given by parameter range (r,phi,z) [m,degree,m]
+# For surface sources an additional Enormal [eV] can be defined.
+#  This adds an additional energy boost to the velocity component normal to the surface.
+########################################
+
+sourcemode	STLvolume
+
+#STLfile   ../STL/OC100-95_5_Source-1.STL                                                                 
+STLfile   ../STL/nEDMsensitivity-OC100-1OC100Cell-1CellSource-1.STL
+
+### parameter ranges for sourcemode cylvolume/cylsurface/boxvolume
+#			r_min	r_max	phi_min	phi_max	z_min	z_max (cylvolume/cylsurface)
+#parameters 0.16	0.5		0		360		0.005	1.145
+
+#			x_min	x_max	y_min	y_max	z_min	z_max	(boxvolume)
+#parameters	0		1		0		1		0		1
+###
+
+particle	neutron		# type of particle the source should create
+ActiveTime	0			# time source is active for
+
+Enormal		0					# give particles an energy boost normal to surface (surface sources only!)
+PhaseSpaceWeighting	0			# weight initial particle density by available phase space (volume source only!)
+
+### initial energy range [eV] and spectrum of particles
+Emin 0e-9
+Emax 233.5e-9 
+spectrum sqrt(x)
+#spectrum 1.96616e39*x^5 - 0.00204264e36*x^4 + 0.834378e27*x^3 - 167.958e18*x^2 + 16674.8e9*x - 639317 # UCN spectrum in horizontal guide from FRM2 source
+
+#Emin 5.5e-9
+#Emax 85e-9
+#spectrum 1.986*(x*1e9 - 5.562)*(1 - tanh(0.3962*(x*1e9 - 72.72))) # total energy spectrum of UCN in storage volume after cleaning
+
+#Emin 20e-9
+#Emax 115e-9
+#spectrum 0.7818*(x*1e9 - 24.842)*(1 - tanh(0.2505*(x*1e9 - 97.510))) # total energy spectrum of low-field-seekers in storage volume after ramping
+
+#Emin 0
+#Emax 751
+#spectrum ProtonBetaSpectrum(x)	# ProtonBetaSpectrum is a predefined function for proton energies from free-neutron decay
+
+#Emin 0
+#Emax 782e3
+#spectrum ElectronBetaSpectrum(x)	# ElectronBetaSpectrum is a predefined function for electron energies from free-neutron decay
+
+#Emin 0
+#Emax 1
+#spectrum MaxwellBoltzSpectrum(300, x)     # MaxwellBoltzSpectrum is a predefined function for gas molecules (first parameter is the temp. in Kelvin)
+
+
+### initial direction of particles (volume sources only!)
+phi_v_min 0		# min. azimuth angle of velocity [degree]
+phi_v_max 360	# max. azimuth angle of velocity [degree]
+phi_v 1			# differential initial distribution of azimuth angle of velocity
+
+theta_v_min 0	# min. polar angle of velocity [degree]
+theta_v_max 180	# max. polar angle of velocity [degree]
+theta_v sin(x)	# differential initial distribution of polar angle of velocity
+
+
+polarization 0	# initial polarization is randomly chosen, weighted by this variable (1: low-field-seekers only, -1: high-field-seekers only) [-1..1]
+
+
+
+
+[FIELDS]
+########### electric and magnetic fields ##########
+# Tabulated maps:
+# 2Dtable: a table of field values on a regular 2D grid. It is assumed that the field is rotationally symmetric around the z axis.
+# 3Dtable: a table of field values on a regular 3D grid. For 3D tables a BoundaryWidth [m] can be specified within which the field is smoothly brought to zero.
+# Paths of table files are assumed to be relative to this config file's path
+#
+# Analytically calculated fields:
+# Conductor: simulate a current flowing from one point to another along an arbitrary straight line
+# EDMStaticEField: simulate a uniform electric field along an arbitrary direction
+# EDMStaticB0GradZField: simulate a magnetic field along the z-axis with a uniform gradient
+# All coordinates are defined in meters, currents in ampere
+#
+# Each line is preceded by a unique identifier. Entries with duplicate identifiers will overwrite each other
+# For each field a time-dependent scaling factor can be added (does not allow spaces yet!).
+# Note that rapidly changing fields might be missed by the trajectory integrator making too large time steps
+##################################################
+#field 		table-file	BFieldScale	EFieldScale	BoundaryWidth
+#1 2Dtable 	42_0063_PF80-24Coils-SameCoilDist-WP3fieldvalCGS.tab			t<400?0:(t<500?0.01*(t-400):(t<700?1:(t<800?0.01*(800-t):0)))		-1
+#2 2Dtable 	42_0063_PF80-24Coils-SameCoilDist_newelectrode85cm.table	0	1
+#3 3Dtable	3Dtable.tab
+
+##3 3Dtable  SCMatOriginAlongX_hires_CGS.table.bz2 1 1 0
+
+#FiniteWire		I		x1		y1		z1		x2		y2		z2		scale
+#5 Conductor		12500	0		0		-1		0		0		2		1		
+
+#EDMStaticB0GradZField   edmB0xoff edmB0yoff edmB0zoff pol_ang azm_ang edmB0z0 edmdB0z0dz BoundaryWidth xmax 	xmin 	ymax 	ymin 	zmax 	zmin scale
+#6 EDMStaticB0GradZField 	0	0	0	0	0	1E-6	1E-9		0.01	1	-1	1 	-1	1	-1	1
+#EDMStaticEField          MagnitudeAlongX (V/m)    MagnitudeAlongY (V/m)   MagnitudeAlongZ (V/m)	scale
+#7 EDMStaticEField			0			0			1E6		1
+#EDM_AC_B1Field  edmB0xoff edmB0yoff edmB0zoff pol_ang azm_ang edmB0z0 edmdB0z0dz freq time1 time2 shift BoundaryWidth xmax 	xmin 	ymax 	ymin 	zmax 	zmin scale
+#8 EDM_AC_B1Field	0	0	0	0	0	1E-6	1E-9	1	2	4	0	0.01	1	-1	1	-1	1	-1	1
+
+
+[PARTICLES]
+######### default values for particle-specific settings ############
+tau 0				# exponential decay lifetime [s], 0: no decay
+tmax 9e99			# max simulation time [s]
+lmax 9e99			# max trajectory length [m]
+
+endlog 1			# print initial and final state to file [0/1]
+endlogvars tstart xstart ystart zstart polstart Hstart Estart solidstart tend xend yend zend polend Hend Eend Bend solidend stopID Nspinflip Nhit trajlength Hmax
+endlogfilter
+tracklog 0			# print complete trajectory to file [0/1]
+trackloginterval 5e-3	# min. distance interval [m] between track points in tracklog file
+hitlog 0
+snapshotlog 1
+snapshots 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250 #251 252 253 254 255 256 257 258 259 260 261 262 263 264 265 266 267 268 269 270 271 272 273 274 275 276 277 278 279 280 281 282 283 284 285 286 287 288 289 290 291 292 293 294 295 296 297 298 299 300 
+snapshotlogvars tstart xstart ystart zstart polstart Hstart Estart solidstart tend xend yend zend polend Hend Eend Bend solidend stopID Nspinflip Nhit trajlength Hmax 
+snapshotlogfilter
+
+#snapshots 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 30 40 50 60 70 80 90 100 110 120 130 140 150 160 170 180 190 200 210 220 230 240 250 260 270 280 290 300 310 320 330 340 350 360 370 380 390 400 450 500 550 600 650 700 750 800 850 900 950 1000 # times [s] at which to take snapshots
+
+spinlog 0			# print spin trajectory to file [0/1]
+spinloginterval 5e-7# min. time interval [s] between track points in spinlog file
+spintimes	0 0	# do spin tracking between these points in time [s]
+Bmax 0.1			# do spin tracking when absolute magnetic field is below this value [T]
+flipspin 0			# do Monte Carlo spin flips when magnetic field surpasses Bmax [0/1]
+interpolatefields 1	# Interpolate magnetic and electric fields for spin tracking between trajectory step points [0/1]. This will speed up spin tracking in high magnetic fields, but break spin tracking in weak, quickly oscillating fields!
+
+############# set options for individual particle types, overwrites above settings ###############
+[neutron]
+tau 880.1
+
+[proton]
+tmax 3e-3
+
+[electron]
+tmax 1e-5
+
+[mercury]
+
+[xenon]
+
+
+[FORMULAS]
+#inCell solidend == 185 or solidend == 186
+
